@@ -1,0 +1,13 @@
+https://microsoft.github.io/autogen/stable//index.html
+https://github.com/microsoft/autogen
+     
+
+Add below to your requirements.txt. 
+
+Don't use autogen/pyautogen
+
+
+autogen-agentchat
+autogen-core
+autogen-extension
+asyncio
