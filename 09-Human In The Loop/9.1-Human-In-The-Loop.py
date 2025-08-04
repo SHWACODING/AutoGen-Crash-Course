@@ -1,0 +1,60 @@
+import asyncio
+
+from autogen_agentchat.agents import AssistantAgent, UserProxyAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.conditions import TextMentionTermination
+from autogen_agentchat.ui import Console
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+api_key = os.getenv('OPENROUTER_API_KEY')
+
+
+model_client = OpenAIChatCompletionClient(
+    base_url="https://openrouter.ai/api/v1",
+    model="mistralai/mistral-small-3.2-24b-instruct:free",
+    api_key=api_key,
+    model_info={
+        "family": "mistral",
+        "vision": True,
+        "function_calling": True,
+        "json_output": False,
+        "structured_output": False
+    }
+)
+
+
+assistant = AssistantAgent(
+    name='Assistant',
+    description='you are a great assistant',
+    model_client=model_client,
+    system_message='You are a really helpful assistant who help on the task given.'
+)
+
+
+user_agent = UserProxyAgent(
+    name="UserProxy",
+    description='A proxy agent that represent a user',
+    input_func=input
+)
+
+
+termination_condition = TextMentionTermination('APPROVE')
+
+team = RoundRobinGroupChat(
+    participants=[assistant, user_agent],
+    termination_condition=termination_condition
+)
+
+stream = team.run_stream(task='Write a nice 4 line poem about Egypt?')
+
+async def main():
+    await Console(stream)
+
+
+if(__name__=="__main__"):
+    asyncio.run(main())
