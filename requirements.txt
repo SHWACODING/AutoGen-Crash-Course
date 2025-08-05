@@ -5,6 +5,9 @@ ollama
 asyncio
 dotenv
 tiktoken
+json-schema-to-pydantic
+autogen-ext[langchain]
+langchain-community
 autogenstudio
 streamlit
 arxiv
