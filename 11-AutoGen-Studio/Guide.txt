@@ -1,0 +1,8 @@
+pip install -U autogenstudio
+
+
+autogenstudio ui --port 8081
+
+Then -->>
+
+ENJOY BUILDING AGENTIC AI WORKFLOWS With AUTOGEN STUDIO
